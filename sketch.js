@@ -41,6 +41,7 @@ function updateImageDisplay() {
       transitionToNextImage();
     } else {
       button.elt.disabled = false; // Enable the button after the last image
+      resetImageDisplay(); // Reset state for future presses
     }
   }
 
@@ -55,6 +56,16 @@ function transitionToNextImage() {
   fadeOutAmount = 255; // Start fading out the current image
   fadeInAmount = 0; // Start fading in the next image
   fadingIn = true; // Set fading direction
+}
+
+// Reset the image display state
+function resetImageDisplay() {
+  noLoop();
+  // Reset the current image index but keep the last image displayed
+  currentImageIndex = images.length ; // Keep the last image
+  timer = 0; // Reset timer
+  fadeOutAmount = 255; // Start fade from full visibility
+  fadeInAmount = 0; // Start with the current image invisible
 }
 
 // Apply fade-in and fade-out effects
@@ -111,6 +122,8 @@ async function generateImage() {
     // Check if new images are received
     if (data.images && data.images.length > 0) {
       console.log("New images received from remote server:", data.images.length);
+      images = []; // Clear existing images
+      currentImageIndex = -1; // Reset current image index
       storeImages(data.images); // Store new images
       // Set the current image index to the first new image
       if (currentImageIndex === -1) {
@@ -118,6 +131,7 @@ async function generateImage() {
         timer = 0; // Reset timer
         fadeOutAmount = 255; // Start fade from full visibility
         fadeInAmount = 0; // Start with the current image invisible
+        loop(); // Restart the draw loop
       }
     } else {
       console.error("No images returned for the specified digit from remote server.");
@@ -153,6 +167,7 @@ async function fetchFromLocalServer(localURL) {
         timer = 0; // Reset timer
         fadeOutAmount = 255; // Start fade from full visibility
         fadeInAmount = 0; // Start with the current image invisible
+        loop(); // Restart the draw loop
       }
     } else {
       console.error("No images returned for the specified digit from local server.");
