@@ -7,13 +7,13 @@ let timer = 0; // Timer to control frame update
 let fadeOutAmount = 255; // Variable for fading out the current image
 let fadeInAmount = 0; // Variable for fading in the next image
 let fadingIn = false; // Flag to control fading direction
-let button 
+let button;
 
 function setup() {
   createCanvas(canvasSize, canvasSize); // Set the canvas size
   button = select('#generateButton');
   pixelDensity(2); // Apply MSAA (anti-aliasing), increase pixel density
-  button.mousePressed(generateImage);
+  button.mousePressed(handleButtonPress);
 }
 
 function draw() {
@@ -23,6 +23,15 @@ function draw() {
   }
 }
 
+// Handle button press
+async function handleButtonPress() {
+  button.elt.disabled = true; // Disable the button immediately
+
+  await generateImage();
+
+  // The button will be re-enabled if there was an error in generateImage
+}
+
 // Function to update image display logic
 function updateImageDisplay() {
   if (timer < duration) {
@@ -30,7 +39,6 @@ function updateImageDisplay() {
   } else {
     if (currentImageIndex < images.length - 1) {
       transitionToNextImage();
-      button.elt.disabled = true; // Disable the button during transition
     } else {
       button.elt.disabled = false; // Enable the button after the last image
     }
@@ -79,14 +87,11 @@ function applyFadeEffects() {
 
 // Function to fetch and store generated images
 async function generateImage() {
-  // Disable the button immediately
-  button.elt.disabled = true;
-
   const digit = select('#digitInput').value(); // Get the digit from input
   // Validate input
   if (digit < 0 || digit > 9) {
     showMessage("Invalid input. Please enter a digit between 0 and 9."); // Show message for invalid input
-    button.elt.disabled = false; // Re-enable button for valid input
+    button.elt.disabled = false; // Re-enable button on invalid input
     return; // Exit the function
   }
 
@@ -155,8 +160,7 @@ async function fetchFromLocalServer(localURL) {
   } catch (error) {
     console.error("Error fetching from local server:", error.message);
     showMessage("Failed to fetch images from both servers."); // Notify the user
-  } finally {
-    button.elt.disabled = false; // Re-enable the button after trying both servers
+    button.elt.disabled = false; // Re-enable button on error
   }
 }
 
