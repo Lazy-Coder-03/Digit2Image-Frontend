@@ -14,7 +14,6 @@ function setup() {
   button = select('#generateButton');
   pixelDensity(2); // Apply MSAA (anti-aliasing), increase pixel density
   button.mousePressed(generateImage);
-
 }
 
 function draw() {
@@ -33,8 +32,6 @@ function updateImageDisplay() {
       transitionToNextImage();
       button.elt.disabled = true; // Disable the button during transition
     } else {
-      // currentImageIndex = -1; // Reset the current image index
-      // images = []; // Clear the images array
       button.elt.disabled = false; // Enable the button after the last image
     }
   }
@@ -82,10 +79,14 @@ function applyFadeEffects() {
 
 // Function to fetch and store generated images
 async function generateImage() {
+  // Disable the button immediately
+  button.elt.disabled = true;
+
   const digit = select('#digitInput').value(); // Get the digit from input
   // Validate input
   if (digit < 0 || digit > 9) {
     showMessage("Invalid input. Please enter a digit between 0 and 9."); // Show message for invalid input
+    button.elt.disabled = false; // Re-enable button for valid input
     return; // Exit the function
   }
 
@@ -154,6 +155,8 @@ async function fetchFromLocalServer(localURL) {
   } catch (error) {
     console.error("Error fetching from local server:", error.message);
     showMessage("Failed to fetch images from both servers."); // Notify the user
+  } finally {
+    button.elt.disabled = false; // Re-enable the button after trying both servers
   }
 }
 
