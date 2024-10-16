@@ -90,7 +90,7 @@ async function generateImage() {
   }
 
   const remoteURL = `https://digit2image-backend.onrender.com/generate/${digit}`;
-  const localURL = `http://localhost:8085/generate/${digit}`;
+  const localURL = `http://localhost:8080/generate/${digit}`;
 
   try {
     const response = await fetch(remoteURL); // Try fetching from the remote server
