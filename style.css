@@ -1,0 +1,50 @@
+/* style.css */
+body {
+  background-color: #1a1a1a;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: 'Patrick Hand', cursive; /* Apply the handwritten font */
+}
+
+main {
+  text-align: center;
+}
+
+input[type="number"] {
+  padding: 10px;
+  font-size: 16px;
+  margin: 10px;
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners for input */
+  font-family: inherit; /* Inherit font from body */
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin: 10px;
+  cursor: pointer;
+  background-color: #4caf50; /* Green color when enabled */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+  font-family: inherit; /* Inherit font from body */
+}
+
+button:disabled {
+  background-color: grey; /* Gray color when disabled */
+  cursor: not-allowed; /* Change cursor to indicate disabled state */
+}
+
+#messageBox {
+  color: red;
+  margin-top: 20px;
+  display: none;
+  font-family: inherit; /* Inherit font from body */
+}

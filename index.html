@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Text to Handwritten Digits</title>
+    <meta charset="utf-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/addons/p5.sound.min.js"></script>
+  </head>
+  <body>
+    <main>
+      <h1>Generate Images of Digit</h1>
+      <input
+        type="number"
+        id="digitInput"
+        min="0"
+        max="9"
+        placeholder="Enter a digit (0-9)"
+      />
+      <button id="generateButton">Generate Image</button>
+      <div id="canvasContainer"></div>
+      <div id="messageBox">
+        Invalid input. Please enter a digit between 0 and 9.
+      </div>
+    </main>
+    <script src="sketch.js"></script>
+  </body>
+</html>
