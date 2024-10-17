@@ -1,50 +1,94 @@
-/* style.css */
 body {
-  background-color: #1a1a1a;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  font-family: 'Patrick Hand', cursive; /* Apply the handwritten font */
+    background-color: #1a1a1a;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Patrick Hand', cursive; /* Apply the handwritten font */
+    overflow: hidden; /* Prevent scrolling */
 }
 
 main {
-  text-align: center;
+    text-align: center;
+    width: 100%; /* Allow full width for main */
 }
 
 input[type="number"] {
-  padding: 10px;
-  font-size: 16px;
-  margin: 10px;
-  border: none; /* Remove default border */
-  border-radius: 5px; /* Rounded corners for input */
-  font-family: inherit; /* Inherit font from body */
+    padding: 10px;
+    font-size: 16px;
+    margin: 10px;
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners for input */
+    font-family: inherit; /* Inherit font from body */
+    text-align: center; /* Center the text */
+    width: 140px; /* Set input width to 80% */
 }
 
 button {
-  padding: 10px 20px;
-  font-size: 16px;
-  margin: 10px;
-  cursor: pointer;
-  background-color: #4caf50; /* Green color when enabled */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-  cursor: pointer;
-  font-family: inherit; /* Inherit font from body */
+    padding: 10px;
+    font-size: 16px;
+    margin: 10px;
+    cursor: pointer;
+    background-color: #4caf50; /* Green color when enabled */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-family: inherit; /* Inherit font from body */
+    width: 140px; /* Set button width to 80% */
 }
 
 button:disabled {
-  background-color: grey; /* Gray color when disabled */
-  cursor: not-allowed; /* Change cursor to indicate disabled state */
+    background-color: grey; /* Gray color when disabled */
+    cursor: not-allowed; /* Change cursor to indicate disabled state */
 }
 
 #messageBox {
-  color: red;
-  margin-top: 20px;
-  display: none;
-  font-family: inherit; /* Inherit font from body */
+    color: red;
+    margin-top: 20px;
+    display: none;
+    font-family: inherit; /* Inherit font from body */
+}
+
+canvas {
+    border: 1px solid white; /* Add border to canvas */
+    border-radius: 5px; /* Rounded corners for canvas */
+    margin-top: 20px; /* Add margin to separate canvas from input */
+}
+
+#canvasContainer {
+    width: 90%; /* Set canvas container width to 90% */
+    margin: 0 auto; /* Center the canvas container */
+    max-width: 400px; /* Set a max-width for larger screens */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    body {
+        height: auto; /* Allow height to adjust based on content */
+        padding: 20px; /* Add padding for mobile devices */
+    }
+
+    main {
+        width: 100%; /* Full width on mobile */
+    }
+
+    input[type="number"]{
+        margin-top: 10px; /* Add margin to separate input and button */
+        width: 16rem; /* Full width on mobile */
+        font-size: 16px; /* Increase font size for better readability */
+    }
+    button {
+        margin-top: 10px; /* Add margin to separate button from input */
+        width: 16rem;
+        font-size: 16px;
+        padding: auto;
+    }
+
+    #canvasContainer {
+        width: 100%; /* Full width for the canvas container on mobile */
+        margin-top: 20px; /* Add margin to separate canvas from input */
+    }
 }

@@ -104,15 +104,15 @@ async function generateImage() {
     return; // Exit the function
   }
 
-  const remoteURL1 = `https://digit2image-backend.onrender.com/generate/${digit}`;
-  const remoteURL2 = `https://digit2image-backend-production.up.railway.app/generate/${digit}`;
+  // const remoteURL1 = `https://digit2image-backend.onrender.com/generate/${digit}`;
+  const remoteURL = `https://digit2image-backend-production.up.railway.app/generate/${digit}`;
   const localURL = `http://localhost:8080/generate/${digit}`;
 
   try {
     // Race the two remote server requests
     const response = await Promise.race([
-      fetch(remoteURL1).then(res => handleFetchResponse(res, "remote server 1")),
-      fetch(remoteURL2).then(res => handleFetchResponse(res, "remote server 2")),
+      fetch(remoteURL).then(res => handleFetchResponse(res, "remote server 1")),
+      // fetch(remoteURL2).then(res => handleFetchResponse(res, "remote server 2")),
     ]);
 
     // Check if response from remote servers returned images
