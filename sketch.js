@@ -28,8 +28,6 @@ async function handleButtonPress() {
   button.elt.disabled = true; // Disable the button immediately
 
   await generateImage();
-
-  // The button will be re-enabled if there was an error in generateImage
 }
 
 // Function to update image display logic
@@ -62,7 +60,7 @@ function transitionToNextImage() {
 function resetImageDisplay() {
   noLoop();
   // Reset the current image index but keep the last image displayed
-  currentImageIndex = images.length ; // Keep the last image
+  currentImageIndex = images.length; // Keep the last image
   timer = 0; // Reset timer
   fadeOutAmount = 255; // Start fade from full visibility
   fadeInAmount = 0; // Start with the current image invisible
@@ -106,26 +104,22 @@ async function generateImage() {
     return; // Exit the function
   }
 
-  const remoteURL = `https://digit2image-backend.onrender.com/generate/${digit}`;
+  const remoteURL1 = `https://digit2image-backend.onrender.com/generate/${digit}`;
+  const remoteURL2 = `https://digit2image-backend-production.up.railway.app/generate/${digit}`;
   const localURL = `http://localhost:8080/generate/${digit}`;
 
   try {
-    const response = await fetch(remoteURL); // Try fetching from the remote server
+    // Race the two remote server requests
+    const response = await Promise.race([
+      fetch(remoteURL1).then(res => handleFetchResponse(res, "remote server 1")),
+      fetch(remoteURL2).then(res => handleFetchResponse(res, "remote server 2")),
+    ]);
 
-    // Check if the response is not okay (status not in the range 200-299)
-    if (!response.ok) {
-      throw new Error(`Remote server responded with status ${response.status}`);
-    }
-
-    const data = await response.json(); // Parse the response as JSON
-
-    // Check if new images are received
-    if (data.images && data.images.length > 0) {
-      console.log("New images received from remote server:", data.images.length);
+    // Check if response from remote servers returned images
+    if (response) {
       images = []; // Clear existing images
       currentImageIndex = -1; // Reset current image index
-      storeImages(data.images); // Store new images
-      // Set the current image index to the first new image
+      storeImages(response.images); // Store new images
       if (currentImageIndex === -1) {
         currentImageIndex = 0; // Start displaying the new images
         timer = 0; // Reset timer
@@ -134,15 +128,33 @@ async function generateImage() {
         loop(); // Restart the draw loop
       }
     } else {
-      console.error("No images returned for the specified digit from remote server.");
+      console.error("No images returned from both remote servers.");
       // If no images, try local server
       await fetchFromLocalServer(localURL);
     }
   } catch (error) {
-    console.error("Error fetching from remote server:", error.message);
+    console.error("Error fetching from remote servers:", error.message);
     // If an error occurs, try local server
     await fetchFromLocalServer(localURL);
   }
+}
+
+// Handle the fetch response and log the server that returned it
+async function handleFetchResponse(response, serverName) {
+  if (!response.ok) {
+    throw new Error(`${serverName} responded with status ${response.status}`);
+  }
+  
+  const data = await response.json(); // Parse the response as JSON
+
+  // Log the server that provided the images
+  console.log(`New images received from ${serverName}:`, data.images.length);
+
+  // Check if new images are received
+  if (data.images && data.images.length > 0) {
+    return data; // Return the data to store the images
+  }
+  return null; // No images received
 }
 
 // Helper function to fetch images from the local server
@@ -174,7 +186,7 @@ async function fetchFromLocalServer(localURL) {
     }
   } catch (error) {
     console.error("Error fetching from local server:", error.message);
-    showMessage("Failed to fetch images from both servers."); // Notify the user
+    showMessage("Failed to fetch images from all servers."); // Notify the user
     button.elt.disabled = false; // Re-enable button on error
   }
 }
